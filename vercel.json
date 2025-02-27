@@ -1,4 +1,10 @@
-"builds": [
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "socket.js",
+      "use": "@vercel/node"
+    }
+  ]
   
-  { "src": "package.json", "use": "@vercel/node" }
-]
+}
