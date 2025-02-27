@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chatr - Sign Up</title>
+    <style>
+        :root {
+            --transparent-bg: rgba(255, 255, 255, 0.05);
+            --accent-purple: #6c5ce7;
+            --text-light: #e9ecef;
+            --shadow-dark: rgba(40, 38, 38, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--transparent-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .signup-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent,
+                    rgba(108, 92, 231, 0.1),
+                    transparent);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--accent-purple);
+            }
+
+            to {
+                text-shadow: 0 0 20px var(--accent-purple), 0 0 30px var(--accent-purple);
+            }
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 50px;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:not(:placeholder-shown)~label {
+            top: 5px;
+            font-size: 12px;
+            color: var(--accent-purple);
+        }
+
+        .signup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .signup-buttons button {
+            padding: 15px;
+            background: var(--accent-purple);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signup-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .signup-buttons button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, transparent 30%, rgba(108, 92, 231, 0.2));
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+
+        .signup-buttons button:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .google-btn {
+            background: #4285f4;
+            margin-top: 20px;
+        }
+
+        .google-btn:hover {
+            background: #3367d6;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <div class="particles"></div>
+        <h1 class="logo">chatr</h1>
+
+        <form class="signup-form" id="signupForm">
+            <div class="input-group">
+                <input type="email" id="email" name="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="confirmPassword" name="cp" required>
+                <label>Confirm Password</label>
+            </div>
+
+            <div class="signup-buttons">
+                <button type="submit">Sign Up</button>
+                <button type="button" class="google-btn" onclick="googleSignIn()">
+                    <img src="https://img.icons8.com/color/24/ffffff/google-logo.png" alt="Google">
+                    Sign up with Google
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const signupForm = document.getElementById('signupForm');
+
+        signupForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const cp = document.getElementById('confirmPassword').value;
+
+            try {
+                const response = await fetch('/l', { // Your signup route
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password, cp })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(errorData.message); // Or display error in a better way
+                } else {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+
+                    // Redirect after setting the token
+                    window.location.href = '/log'; // Or your desired redirect URL
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("An error occurred during signup.");
+            }
+        });
+
+
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.width = `${Math.random() * 10 + 5}px`;
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = `${Math.random() * 8}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function googleSignIn() {
+            // Replace with your Google OAuth URL
+            window.location.href = 'your-google-auth-url';
+        }
+
+        createParticles(); // Call createParticles to initialize
+    </script>
+</body>
+
+</html>
