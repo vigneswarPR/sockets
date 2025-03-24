@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifying User</title>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #16213e;
+            --accent-color: #a8a5e6;
+            --text-light: #e9ecef;
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --glass-opacity: 0.1;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                linear-gradient(45deg,
+                    var(--secondary-color),
+                    var(--primary-color));
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, var(--glass-opacity));
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow:
+                0 10px 30px var(--shadow-dark),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                float 6s infinite ease-in-out;
+        }
+
+        .loading-text {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInText 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+                pulse 2s infinite;
+        }
+
+        .progress-bar {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 1.5rem auto;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background:
+                linear-gradient(90deg,
+                    var(--accent-color),
+                    rgba(168, 165, 230, 0.8));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: progress 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            position: relative;
+        }
+
+        .progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            animation: shimmer 2s infinite linear;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: bounce 1.2s infinite;
+            filter: drop-shadow(0 0 5px rgba(168, 165, 230, 0.5));
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes progress {
+
+            0%,
+            100% {
+                width: 0%;
+            }
+
+            50% {
+                width: 85%;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-150%);
+            }
+
+            100% {
+                transform: translateX(250%);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                width: 90%;
+            }
+
+            .loading-text {
+                font-size: 1.6rem;
+            }
+
+            .progress-bar {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="loading-text">Verifying User</h1>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <script>
+        async function verifyUser() {
+            try {
+                const response = await fetch('/verify', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error("Verification failed:", response.status, await response.text());
+                    localStorage.removeItem('token');
+                    window.location.href = '/a';
+                    return;
+                }
+
+                console.log("Verification successful!");
+                window.location.href = '/home';
+            } catch (error) {
+                console.error("Verification error:", error);
+                localStorage.removeItem('token');
+                window.location.href = '/a';
+            }
+        }
+
+        verifyUser();
+    </script>
+</body>
+
+</html>

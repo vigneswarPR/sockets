@@ -22,7 +22,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            background: linear-gradient(45deg, #5aa2bf, #b1589c);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -157,7 +157,7 @@
         .input-group input:not(:placeholder-shown)~label {
             top: 5px;
             font-size: 12px;
-            color: var(--accent-purple);
+            color: white;
         }
 
         .signup-buttons {
@@ -170,6 +170,7 @@
         .signup-buttons button {
             padding: 15px;
             background: var(--accent-purple);
+            border: black;
             color: var(--text-light);
             border: none;
             border-radius: 50px;
@@ -248,16 +249,20 @@
             </div>
 
             <div class="signup-buttons">
-                <button type="submit">Sign Up</button>
+                <button type="submit" onclick="redirect()">Sign Up</button>
                 <button type="button" class="google-btn" onclick="googleSignIn()">
                     <img src="https://img.icons8.com/color/24/ffffff/google-logo.png" alt="Google">
                     Sign up with Google
                 </button>
+
             </div>
         </form>
     </div>
 
     <script>
+        function redirect() {
+            window.location.href = "/loginpage";
+        }
         const signupForm = document.getElementById('signupForm');
 
         signupForm.addEventListener('submit', async (event) => {

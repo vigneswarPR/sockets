@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatr</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(30deg);
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeInDown 0.8s 0.2s forwards;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 40px;
+            transform: translateX(-50px);
+            opacity: 0;
+            animation: slideIn 0.8s 0.5s forwards;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.8s forwards;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to right, #00d0ff, #0080ff);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Blob animations */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            z-index: -2;
+        }
+
+        .blob1 {
+            background: rgba(87, 0, 255, 0.6);
+            top: -200px;
+            left: -200px;
+            animation: float1 20s infinite alternate;
+        }
+
+        .blob2 {
+            background: rgba(0, 183, 255, 0.6);
+            bottom: -200px;
+            right: -200px;
+            animation: float2 15s infinite alternate;
+        }
+
+        /* Particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            background: rgba(255, 255, 255, 0.8);
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            animation: particles 20s linear infinite;
+        }
+
+        @keyframes fadeInDown {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float1 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(40px, 40px) scale(1.2);
+            }
+
+            100% {
+                transform: translate(10px, 20px) scale(0.8);
+            }
+        }
+
+        @keyframes float2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-40px, -40px) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-10px, -20px) scale(0.8);
+            }
+        }
+
+        @keyframes particles {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Button click effect */
+        .button-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0;
+            transform: scale(0);
+            pointer-events: none;
+        }
+
+        /* Success message */
+        .success-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(9, 9, 36, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .success-content {
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: #00e676;
+            margin-bottom: 20px;
+        }
+
+        .show-success {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+
+    <div class="container">
+        <h1>chatr</h1>
+        <form action="/otp" method="post">
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Enter your email" autocomplete="off">
+            </div>
+
+            <button type="submit" id="submit-btn">
+                Send otp
+                <div class="button-effect" id="button-effect"></div>
+            </button>
+
+
+
+            <div class="success-message" id="success-message">
+                <div class="success-content">
+                    <div class="success-icon">✓</div>
+                    <h2>Thank you!</h2>
+                    <p>We'll be in touch soon.</p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('span');
+            particle.className = 'particle';
+
+            // Random position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+
+            // Random size
+            const size = Math.random() * 4 + 1;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+
+            // Random opacity
+            particle.style.opacity = Math.random() * 0.5 + 0.3;
+
+            // Random animation delay
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // Button click effect
+        const button = document.getElementById('submit-btn');
+        const buttonEffect = document.getElementById('button-effect');
+        const successMessage = document.getElementById('success-message');
+        const emailInput = document.getElementById('email');
+
+        button.addEventListener('click', function (e) {
+            // Create ripple effect
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            buttonEffect.style.left = x + 'px';
+            buttonEffect.style.top = y + 'px';
+            buttonEffect.style.transform = 'translate(-50%, -50%) scale(0)';
+            buttonEffect.style.opacity = '1';
+
+            setTimeout(() => {
+                buttonEffect.style.transform = 'translate(-50%, -50%) scale(4)';
+                buttonEffect.style.opacity = '0';
+            }, 10);
+
+            // Validate email
+            const email = emailInput.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (emailRegex.test(email)) {
+                // Show success message
+                setTimeout(() => {
+                    successMessage.classList.add('show-success');
+                }, 300);
+
+                // Reset form after delay
+                setTimeout(() => {
+                    successMessage.classList.remove('show-success');
+                    emailInput.value = '';
+                }, 3000);
+            } else {
+                // Shake input for invalid email
+                emailInput.style.animation = 'none';
+                setTimeout(() => {
+                    emailInput.style.animation = 'shake 0.5s';
+                }, 10);
+            }
+        });
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+      }
+    `;
+        document.head.appendChild(style);
+
+        // Focus effect for input
+        emailInput.addEventListener('focus', function () {
+            this.parentElement.style.transform = 'scale(1.03)';
+            this.parentElement.style.transition = 'transform 0.3s';
+        });
+
+        emailInput.addEventListener('blur', function () {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+
+</html>
